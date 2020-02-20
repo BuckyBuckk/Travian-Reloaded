@@ -15,10 +15,10 @@ class CreateVillageResourcesTable extends Migration
     {
         Schema::create('village_resources', function (Blueprint $table) {
             $table->increments('idVillage');
-            $table->integer('currentWood');
-            $table->integer('currentClay');
-            $table->integer('currentIron');
-            $table->integer('currentCrop');
+            $table->float('currentWood');
+            $table->float('currentClay');
+            $table->float('currentIron');
+            $table->float('currentCrop');
             $table->integer('lastUpdate');
         });
     }

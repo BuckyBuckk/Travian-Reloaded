@@ -16,24 +16,13 @@ class AllVillagesController extends Controller
     public function index()
     {
         // Get articles
-        $villages = AllVillages::orderBy('idVillage', 'asc')->get();
+        $villages = AllVillages::all();
 
         //return AllVillages::all();
         
         // Return collection of articles as a resource;
         return VillageResource::collection($villages);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -42,7 +31,18 @@ class AllVillagesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $villages =  new AllVillages;
+
+        $villages->idVillage = $request->input('idVillage');
+        $villages->idPlayer = $request->input('idPlayer');
+        $villages->Xcoordinate = $request->input('Xcoordinate');
+        $villages->Ycoordinate = $request->input('Ycoordinate');
+        $villages->villageName = $request->input('villageName');
+        $villages->capital = $request->input('capital');
+
+        if($villages->save()) {
+            return new VillageResource($villages);
+        }
     }
 
     /**
@@ -53,18 +53,11 @@ class AllVillagesController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        // Get article
+        $villages = AllVillages::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        // Return single article as a resource
+        return new VillageResource($villages);
     }
 
     /**
@@ -76,7 +69,18 @@ class AllVillagesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $villages =  AllVillages::findOrFail($id);
+
+        $villages->idVillage = $request->input('idVillage');
+        $villages->idPlayer = $request->input('idPlayer');
+        $villages->Xcoordinate = $request->input('Xcoordinate');
+        $villages->Ycoordinate = $request->input('Ycoordinate');
+        $villages->villageName = $request->input('villageName');
+        $villages->capital = $request->input('capital');
+
+        if($villages->save()) {
+            return new VillageResource($villages);
+        }
     }
 
     /**
@@ -87,6 +91,10 @@ class AllVillagesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $villages = AllVillages::findOrFail($id);
+
+        if($villages->delete()) {
+            return new VillageResource($villages);
+        }    
     }
 }

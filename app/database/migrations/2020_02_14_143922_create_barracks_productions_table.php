@@ -15,10 +15,10 @@ class CreateBarracksProductionsTable extends Migration
     {
         Schema::create('barracks_productions', function (Blueprint $table) {
             $table->integer('idVillage');
-            $table->string('unitName');
-            $table->integer('unitId');
-            $table->integer('unitCount');
-            $table->float('unitProdTime');
+            $table->string('troopName');
+            $table->integer('troopId');
+            $table->integer('troopCount');
+            $table->float('troopProdTime');
             $table->integer('timeStarted');
             $table->integer('timeCompleted');
             $table->increments('barrProdId');

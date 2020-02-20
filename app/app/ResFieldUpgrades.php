@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ResFieldUpgrades extends Model
 {
-    //
+    public $timestamps = false;
 }
