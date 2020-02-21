@@ -17,6 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+/*
 // List articles
 Route::get('articles', 'ArticleController@index');
 // List single article
@@ -27,7 +28,7 @@ Route::post('article', 'ArticleController@store');
 Route::put('article', 'ArticleController@store');
 // Delete article
 Route::delete('article/{id}', 'ArticleController@destroy');
-
+*/
 
 Route::get('villages', 'AllVillagesController@index');
 Route::get('village/{id}', 'AllVillagesController@show');
@@ -53,11 +54,13 @@ Route::post('sendTroops', 'SendTroopsController@store');
 Route::put('sendTroops/{id}', 'SendTroopsController@update');
 Route::delete('sendTroops/{id}', 'SendTroopsController@destroy');
 
+/*
 Route::get('stableProductions', 'StableProductionController@index');
 Route::get('stableProductions/{id}', 'StableProductionController@show');
 Route::post('stableProductions', 'StableProductionController@store');
 Route::put('stableProductions/{id}', 'StableProductionController@update');
 Route::delete('stableProductions/{id}', 'StableProductionController@destroy');
+*/
 
 Route::get('villageFieldLevels', 'VillageFieldLevelsController@index');
 Route::get('villageFieldLevels/{id}', 'VillageFieldLevelsController@show');

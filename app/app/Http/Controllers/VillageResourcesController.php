@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\VillageResources;
+use App\Http\Resources\VillageResourcesResource;
 
 class VillageResourcesController extends Controller
 {
@@ -14,19 +15,14 @@ class VillageResourcesController extends Controller
      */
     public function index()
     {
-        //
-    }
+        // Get articles
+        $villageResources = VillageResources::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        //return VillageResources::all();
+        
+        // Return collection of articles as a resource;
+        return VillageResourcesResource::collection($villageResources);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +31,18 @@ class VillageResourcesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $villageResources =  new VillageResources;
+
+        $villageResources->idVillage = $request->input('idVillage');
+        $villageResources->currentWood = $request->input('currentWood');
+        $villageResources->currentClay = $request->input('currentClay');
+        $villageResources->currentIron = $request->input('currentIron');
+        $villageResources->currentCrop = $request->input('currentCrop');
+        $villageResources->lastUpdate = $request->input('lastUpdate');
+
+        if($villageResources->save()) {
+            return new VillageResourcesResource($villageResources);
+        }
     }
 
     /**
@@ -46,18 +53,11 @@ class VillageResourcesController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        // Get article
+        $villageResources = VillageResources::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        // Return single article as a resource
+        return new VillageResourcesResource($villageResources);
     }
 
     /**
@@ -69,7 +69,18 @@ class VillageResourcesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $villageResources =  VillageResources::findOrFail($id);
+
+        $villageResources->idVillage = $request->input('idVillage');
+        $villageResources->currentWood = $request->input('currentWood');
+        $villageResources->currentClay = $request->input('currentClay');
+        $villageResources->currentIron = $request->input('currentIron');
+        $villageResources->currentCrop = $request->input('currentCrop');
+        $villageResources->lastUpdate = $request->input('lastUpdate');
+
+        if($villageResources->save()) {
+            return new VillageResourcesResource($villageResources);
+        }
     }
 
     /**
@@ -80,6 +91,10 @@ class VillageResourcesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $villageResources = VillageResources::findOrFail($id);
+
+        if($villageResources->delete()) {
+            return new VillageResourcesResource($villageResources);
+        }    
     }
 }

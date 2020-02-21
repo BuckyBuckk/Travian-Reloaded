@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\ResFieldUpgrades;
+use App\Http\Resources\ResFieldUpgradesResource;
 
 class ResFieldUpgradesController extends Controller
 {
@@ -14,19 +15,14 @@ class ResFieldUpgradesController extends Controller
      */
     public function index()
     {
-        //
-    }
+        // Get articles
+        $resFieldUpgrades = ResFieldUpgrades::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        //return ResFieldUpgrades::all();
+        
+        // Return collection of articles as a resource;
+        return ResFieldUpgradesResource::collection($resFieldUpgrades);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +31,20 @@ class ResFieldUpgradesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $resFieldUpgrades =  new ResFieldUpgrades;
+
+        $resFieldUpgrades->idVillage = $request->input('idVillage');
+        $resFieldUpgrades->rfid = $request->input('rfid');
+        $resFieldUpgrades->fieldType = $request->input('fieldType');
+        $resFieldUpgrades->fieldLevel = $request->input('fieldLevel');
+        $resFieldUpgrades->troopProdTime = $request->input('troopProdTime');
+        $resFieldUpgrades->timeStarted = $request->input('timeStarted');
+        $resFieldUpgrades->timeCompleted = $request->input('timeCompleted');
+        $resFieldUpgrades->upgradeId = $request->input('upgradeId');
+
+        if($resFieldUpgrades->save()) {
+            return new ResFieldUpgradesResource($resFieldUpgrades);
+        }
     }
 
     /**
@@ -46,18 +55,11 @@ class ResFieldUpgradesController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        // Get article
+        $resFieldUpgrades = ResFieldUpgrades::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        // Return single article as a resource
+        return new ResFieldUpgradesResource($resFieldUpgrades);
     }
 
     /**
@@ -69,7 +71,20 @@ class ResFieldUpgradesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $resFieldUpgrades =  ResFieldUpgrades::findOrFail($id);
+
+        $resFieldUpgrades->idVillage = $request->input('idVillage');
+        $resFieldUpgrades->rfid = $request->input('rfid');
+        $resFieldUpgrades->fieldType = $request->input('fieldType');
+        $resFieldUpgrades->fieldLevel = $request->input('fieldLevel');
+        $resFieldUpgrades->troopProdTime = $request->input('troopProdTime');
+        $resFieldUpgrades->timeStarted = $request->input('timeStarted');
+        $resFieldUpgrades->timeCompleted = $request->input('timeCompleted');
+        $resFieldUpgrades->upgradeId = $request->input('upgradeId');
+
+        if($resFieldUpgrades->save()) {
+            return new ResFieldUpgradesResource($resFieldUpgrades);
+        }
     }
 
     /**
@@ -80,6 +95,10 @@ class ResFieldUpgradesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $resFieldUpgrades = ResFieldUpgrades::findOrFail($id);
+
+        if($resFieldUpgrades->delete()) {
+            return new ResFieldUpgradesResource($resFieldUpgrades);
+        }    
     }
 }

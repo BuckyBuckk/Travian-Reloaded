@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\VillageProduction;
+use App\Http\Resources\VillageProductionResource;
 
 class VillageProductionController extends Controller
 {
@@ -14,19 +15,14 @@ class VillageProductionController extends Controller
      */
     public function index()
     {
-        //
-    }
+        // Get articles
+        $villageProduction = VillageProduction::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        //return VillageProduction::all();
+        
+        // Return collection of articles as a resource;
+        return VillageProductionResource::collection($villageProduction);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +31,17 @@ class VillageProductionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $villageProduction =  new VillageProduction;
+
+        $villageProduction->idVillage = $request->input('idVillage');
+        $villageProduction->productionWood = $request->input('productionWood');
+        $villageProduction->productionClay = $request->input('productionClay');
+        $villageProduction->productionIron = $request->input('productionIron');
+        $villageProduction->productionCrop = $request->input('productionCrop');
+
+        if($villageProduction->save()) {
+            return new VillageProductionResource($villageProduction);
+        }
     }
 
     /**
@@ -46,18 +52,11 @@ class VillageProductionController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        // Get article
+        $villageProduction = VillageProduction::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        // Return single article as a resource
+        return new VillageProductionResource($villageProduction);
     }
 
     /**
@@ -69,7 +68,17 @@ class VillageProductionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $villageProduction =  VillageProduction::findOrFail($id);
+
+        $villageProduction->idVillage = $request->input('idVillage');
+        $villageProduction->productionWood = $request->input('productionWood');
+        $villageProduction->productionClay = $request->input('productionClay');
+        $villageProduction->productionIron = $request->input('productionIron');
+        $villageProduction->productionCrop = $request->input('productionCrop');
+
+        if($villageProduction->save()) {
+            return new VillageProductionResource($villageProduction);
+        }
     }
 
     /**
@@ -80,6 +89,10 @@ class VillageProductionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $villageProduction = VillageProduction::findOrFail($id);
+
+        if($villageProduction->delete()) {
+            return new VillageProductionResource($villageProduction);
+        }    
     }
 }

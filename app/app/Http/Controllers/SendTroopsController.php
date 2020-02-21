@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\SendTroops;
+use App\Http\Resources\SendTroopsResource;
 
 class SendTroopsController extends Controller
 {
@@ -14,19 +15,14 @@ class SendTroopsController extends Controller
      */
     public function index()
     {
-        //
-    }
+        // Get articles
+        $sendTroops = SendTroops::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        //return SendTroops::all();
+        
+        // Return collection of articles as a resource;
+        return SendTroopsResource::collection($sendTroops);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +31,29 @@ class SendTroopsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $sendTroops =  new SendTroops;
+
+        $sendTroops->sendTroopsId = $request->input('sendTroopsId');
+        $sendTroops->sendType = $request->input('sendType');
+        $sendTroops->idVillageFrom = $request->input('idVillageFrom');
+        $sendTroops->idVillageTo = $request->input('idVillageTo');
+        $sendTroops->timeSent = $request->input('timeSent');
+        $sendTroops->timeArrived = $request->input('timeArrived');
+        $sendTroops->troopTribe = $request->input('troopTribe');
+        $sendTroops->troop1num = $request->input('troop1num');
+        $sendTroops->troop2num = $request->input('troop2num');
+        $sendTroops->troop3num = $request->input('troop3num');
+        $sendTroops->troop4num = $request->input('troop4num');
+        $sendTroops->troop5num = $request->input('troop5num');
+        $sendTroops->troop6num = $request->input('troop6num');
+        $sendTroops->troop7num = $request->input('troop7num');
+        $sendTroops->troop8num = $request->input('troop8num');
+        $sendTroops->troop9num = $request->input('troop9num');
+        $sendTroops->troop10num = $request->input('troop10num');
+
+        if($sendTroops->save()) {
+            return new SendTroopsResource($sendTroops);
+        }
     }
 
     /**
@@ -46,18 +64,11 @@ class SendTroopsController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        // Get article
+        $sendTroops = SendTroops::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        // Return single article as a resource
+        return new SendTroopsResource($sendTroops);
     }
 
     /**
@@ -69,7 +80,29 @@ class SendTroopsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $sendTroops =  SendTroops::findOrFail($id);
+
+        $sendTroops->sendTroopsId = $request->input('sendTroopsId');
+        $sendTroops->sendType = $request->input('sendType');
+        $sendTroops->idVillageFrom = $request->input('idVillageFrom');
+        $sendTroops->idVillageTo = $request->input('idVillageTo');
+        $sendTroops->timeSent = $request->input('timeSent');
+        $sendTroops->timeArrived = $request->input('timeArrived');
+        $sendTroops->troopTribe = $request->input('troopTribe');
+        $sendTroops->troop1num = $request->input('troop1num');
+        $sendTroops->troop2num = $request->input('troop2num');
+        $sendTroops->troop3num = $request->input('troop3num');
+        $sendTroops->troop4num = $request->input('troop4num');
+        $sendTroops->troop5num = $request->input('troop5num');
+        $sendTroops->troop6num = $request->input('troop6num');
+        $sendTroops->troop7num = $request->input('troop7num');
+        $sendTroops->troop8num = $request->input('troop8num');
+        $sendTroops->troop9num = $request->input('troop9num');
+        $sendTroops->troop10num = $request->input('troop10num');
+
+        if($sendTroops->save()) {
+            return new SendTroopsResource($sendTroops);
+        }
     }
 
     /**
@@ -80,6 +113,10 @@ class SendTroopsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $sendTroops = SendTroops::findOrFail($id);
+
+        if($sendTroops->delete()) {
+            return new SendTroopsResource($sendTroops);
+        }    
     }
 }

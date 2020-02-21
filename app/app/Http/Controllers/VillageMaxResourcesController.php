@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\VillageMaxResources;
+use App\Http\Resources\VillageMaxResourcesResource;
 
 class VillageMaxResourcesController extends Controller
 {
@@ -14,19 +15,14 @@ class VillageMaxResourcesController extends Controller
      */
     public function index()
     {
-        //
-    }
+        // Get articles
+        $villageMaxResources = VillageMaxResources::all();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        //return VillageMaxResources::all();
+        
+        // Return collection of articles as a resource;
+        return VillageMaxResourcesResource::collection($villageMaxResources);
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -35,7 +31,17 @@ class VillageMaxResourcesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $villageMaxResources =  new VillageMaxResources;
+
+        $villageMaxResources->idVillage = $request->input('idVillage');
+        $villageMaxResources->maxWood = $request->input('maxWood');
+        $villageMaxResources->maxClay = $request->input('maxClay');
+        $villageMaxResources->maxIron = $request->input('maxIron');
+        $villageMaxResources->maxCrop = $request->input('maxCrop');
+
+        if($villageMaxResources->save()) {
+            return new VillageMaxResourcesResource($villageMaxResources);
+        }
     }
 
     /**
@@ -46,18 +52,11 @@ class VillageMaxResourcesController extends Controller
      */
     public function show($id)
     {
-        //
-    }
+        // Get article
+        $villageMaxResources = VillageMaxResources::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        // Return single article as a resource
+        return new VillageMaxResourcesResource($villageMaxResources);
     }
 
     /**
@@ -69,7 +68,17 @@ class VillageMaxResourcesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $villageMaxResources =  VillageMaxResources::findOrFail($id);
+
+        $villageMaxResources->idVillage = $request->input('idVillage');
+        $villageMaxResources->maxWood = $request->input('maxWood');
+        $villageMaxResources->maxClay = $request->input('maxClay');
+        $villageMaxResources->maxIron = $request->input('maxIron');
+        $villageMaxResources->maxCrop = $request->input('maxCrop');
+
+        if($villageMaxResources->save()) {
+            return new VillageMaxResourcesResource($villageMaxResources);
+        }
     }
 
     /**
@@ -80,6 +89,10 @@ class VillageMaxResourcesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $villageMaxResources = VillageMaxResources::findOrFail($id);
+
+        if($villageMaxResources->delete()) {
+            return new VillageMaxResourcesResource($villageMaxResources);
+        }    
     }
 }
