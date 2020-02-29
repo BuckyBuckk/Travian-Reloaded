@@ -1,1 +1,1 @@
-# Travian-Reloaded
+# OpenTravian
