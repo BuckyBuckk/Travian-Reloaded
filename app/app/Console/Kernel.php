@@ -4,6 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -24,13 +25,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        /*
+        $schedule->call(function () {
+            DB::table('users')->delete();
+        })->everyMinute();
+        */
     }
 
     /**
      * Register the commands for the application.
-     *
+     *  
      * @return void
      */
     protected function commands()

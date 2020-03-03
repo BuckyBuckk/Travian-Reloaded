@@ -31,10 +31,10 @@ Route::delete('article/{id}', 'ArticleController@destroy');
 */
 
 Route::get('villages', 'AllVillagesController@index');
-Route::get('village/{id}', 'AllVillagesController@show');
+Route::get('villages/{id}', 'AllVillagesController@show');
 Route::post('villages', 'AllVillagesController@store');
-Route::put('village/{id}', 'AllVillagesController@update');
-Route::delete('village/{id}', 'AllVillagesController@destroy');
+Route::put('villages/{id}', 'AllVillagesController@update');
+Route::delete('villages/{id}', 'AllVillagesController@destroy');
 
 Route::get('barracksProductions', 'BarracksProductionController@index');
 Route::get('barracksProductions/{id}', 'BarracksProductionController@show');
@@ -43,24 +43,16 @@ Route::put('barracksProductions/{id}', 'BarracksProductionController@update');
 Route::delete('barracksProductions/{id}', 'BarracksProductionController@destroy');
 
 Route::get('resFieldUpgrades', 'ResFieldUpgradesController@index');
-Route::get('resFieldUpgrade/{id}', 'ResFieldUpgradesController@show');
+Route::get('resFieldUpgrades/{id}', 'ResFieldUpgradesController@show');
 Route::post('resFieldUpgrades', 'ResFieldUpgradesController@store');
-Route::put('resFieldUpgrade/{id}', 'ResFieldUpgradesController@update');
-Route::delete('resFieldUpgrade/{id}', 'ResFieldUpgradesController@destroy');
+Route::put('resFieldUpgrades/{id}', 'ResFieldUpgradesController@update');
+Route::delete('resFieldUpgrades/{id}', 'ResFieldUpgradesController@destroy');
 
 Route::get('sendTroops', 'SendTroopsController@index');
 Route::get('sendTroops/{id}', 'SendTroopsController@show');
 Route::post('sendTroops', 'SendTroopsController@store');
 Route::put('sendTroops/{id}', 'SendTroopsController@update');
 Route::delete('sendTroops/{id}', 'SendTroopsController@destroy');
-
-/*
-Route::get('stableProductions', 'StableProductionController@index');
-Route::get('stableProductions/{id}', 'StableProductionController@show');
-Route::post('stableProductions', 'StableProductionController@store');
-Route::put('stableProductions/{id}', 'StableProductionController@update');
-Route::delete('stableProductions/{id}', 'StableProductionController@destroy');
-*/
 
 Route::get('villageFieldLevels', 'VillageFieldLevelsController@index');
 Route::get('villageFieldLevels/{id}', 'VillageFieldLevelsController@show');
@@ -87,10 +79,10 @@ Route::put('villageOwnTroops/{id}', 'VillageOwnTroopsController@update');
 Route::delete('villageOwnTroops/{id}', 'VillageOwnTroopsController@destroy');
 
 Route::get('villageProduction', 'VillageProductionController@index');
-Route::get('villageProduction/{id}', 'VillageProductionController@show');
+Route::get('villageProductions/{id}', 'VillageProductionController@show');
 Route::post('villageProduction', 'VillageProductionController@store');
-Route::put('villageProduction/{id}', 'VillageProductionController@update');
-Route::delete('villageProduction/{id}', 'VillageProductionController@destroy');
+Route::put('villageProductions/{id}', 'VillageProductionController@update');
+Route::delete('villageProductions/{id}', 'VillageProductionController@destroy');
 
 Route::get('villageReinforcements', 'VillageReinforcementsController@index');
 Route::get('villageReinforcements/{id}', 'VillageReinforcementsController@show');
@@ -103,3 +95,11 @@ Route::get('villageResources/{id}', 'VillageResourcesController@show');
 Route::post('villageResources', 'VillageResourcesController@store');
 Route::put('villageResources/{id}', 'VillageResourcesController@update');
 Route::delete('villageResources/{id}', 'VillageResourcesController@destroy');
+
+/*
+Route::get('stableProductions', 'StableProductionController@index');
+Route::get('stableProductions/{id}', 'StableProductionController@show');
+Route::post('stableProductions', 'StableProductionController@store');
+Route::put('stableProductions/{id}', 'StableProductionController@update');
+Route::delete('stableProductions/{id}', 'StableProductionController@destroy');
+*/

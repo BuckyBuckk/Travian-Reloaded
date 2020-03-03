@@ -15,14 +15,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 */
+
+
 Auth::routes();
+
+Route::get('/{any}', 'SpaController@index')->where('any', '.*');
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/resources', function () {
-    return view('resources');
-});
-
+//Route::get('/resources', function () {
+//    return view('resources');
+//});
+/*
 Route::get('/login', function () {
     return view('login');
 });
+*/

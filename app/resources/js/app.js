@@ -3,10 +3,15 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+import VueRouter from 'vue-router';
+
+import Resources from './components/Resources.vue';
+import ExampleComponent from './components/ExampleComponent.vue';
+import Login from './components/Login.vue';
+
 
 require('./bootstrap');
 window.Vue = require('vue');
-
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -23,6 +28,18 @@ Vue.component('navbar', require('./components/Navbar.vue').default);
 Vue.component('articles', require('./components/Articles.vue').default);
 Vue.component('login', require('./components/Login.vue').default);
 Vue.component('resources', require('./components/Resources.vue').default);
+Vue.component('app', require('./components/app.vue').default);
+
+Vue.use(VueRouter);
+
+const router = new VueRouter({
+    mode: 'history',
+    routes: [
+        {path: '/home', name: 'home', component: ExampleComponent},
+        {path: '/login', name: 'login', component: Login},
+        {path: '/resources', name: 'resources', component: Resources},
+    ],
+});
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -32,4 +49,6 @@ Vue.component('resources', require('./components/Resources.vue').default);
 
 const app = new Vue({
     el: '#app',
+    //components: { App },
+    router,
 });

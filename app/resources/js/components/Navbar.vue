@@ -1,13 +1,13 @@
 <template>
    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">TRAVIAN</a>
+        <router-link class="navbar-brand" :to="{ name: 'home' }">TRAVIAN</router-link>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse d-flex justify-content-center" id="navbarNav">
             <ul class="navbar-nav ">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/resources">Resources</a>
+                    <router-link class="nav-link" :to="{ name: 'resources' }">Resources</router-link>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/village">Village</a>

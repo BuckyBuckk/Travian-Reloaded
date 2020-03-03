@@ -37,7 +37,6 @@ class ResFieldUpgradesController extends Controller
         $resFieldUpgrades->rfid = $request->input('rfid');
         $resFieldUpgrades->fieldType = $request->input('fieldType');
         $resFieldUpgrades->fieldLevel = $request->input('fieldLevel');
-        $resFieldUpgrades->troopProdTime = $request->input('troopProdTime');
         $resFieldUpgrades->timeStarted = $request->input('timeStarted');
         $resFieldUpgrades->timeCompleted = $request->input('timeCompleted');
         $resFieldUpgrades->upgradeId = $request->input('upgradeId');
@@ -56,7 +55,7 @@ class ResFieldUpgradesController extends Controller
     public function show($id)
     {
         // Get article
-        $resFieldUpgrades = ResFieldUpgrades::findOrFail($id);
+        $resFieldUpgrades = ResFieldUpgrades::where('idVillage', $id)->get();
 
         // Return single article as a resource
         return new ResFieldUpgradesResource($resFieldUpgrades);
@@ -77,7 +76,6 @@ class ResFieldUpgradesController extends Controller
         $resFieldUpgrades->rfid = $request->input('rfid');
         $resFieldUpgrades->fieldType = $request->input('fieldType');
         $resFieldUpgrades->fieldLevel = $request->input('fieldLevel');
-        $resFieldUpgrades->troopProdTime = $request->input('troopProdTime');
         $resFieldUpgrades->timeStarted = $request->input('timeStarted');
         $resFieldUpgrades->timeCompleted = $request->input('timeCompleted');
         $resFieldUpgrades->upgradeId = $request->input('upgradeId');

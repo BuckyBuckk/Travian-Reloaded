@@ -58,7 +58,7 @@ class BarracksProductionController extends Controller
     public function show($id)
     {
         // Get article
-        $barracksProduction = BarracksProduction::findOrFail($id);
+        $barracksProduction = BarracksProduction::where('idVillage', $id)->get();
 
         // Return single article as a resource
         return new BarracksProductionResource($barracksProduction);

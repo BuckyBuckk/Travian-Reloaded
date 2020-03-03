@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\AllVillages;
-use App\Http\Resources\VillageResource;
+use App\Http\Resources\VillageResourcesResource;
 
 class AllVillagesController extends Controller
 {
@@ -21,7 +21,7 @@ class AllVillagesController extends Controller
         //return AllVillages::all();
         
         // Return collection of articles as a resource;
-        return VillageResource::collection($villages);
+        return VillageResourcesResource::collection($villages);
     }
     /**
      * Store a newly created resource in storage.
@@ -41,7 +41,7 @@ class AllVillagesController extends Controller
         $villages->capital = $request->input('capital');
 
         if($villages->save()) {
-            return new VillageResource($villages);
+            return new VillageResourcesResource($villages);
         }
     }
 
@@ -57,7 +57,7 @@ class AllVillagesController extends Controller
         $villages = AllVillages::findOrFail($id);
 
         // Return single article as a resource
-        return new VillageResource($villages);
+        return new VillageResourcesResource($villages);
     }
 
     /**
@@ -79,7 +79,7 @@ class AllVillagesController extends Controller
         $villages->capital = $request->input('capital');
 
         if($villages->save()) {
-            return new VillageResource($villages);
+            return new VillageResourcesResource($villages);
         }
     }
 
@@ -94,7 +94,7 @@ class AllVillagesController extends Controller
         $villages = AllVillages::findOrFail($id);
 
         if($villages->delete()) {
-            return new VillageResource($villages);
+            return new VillageResourcesResource($villages);
         }    
     }
 }

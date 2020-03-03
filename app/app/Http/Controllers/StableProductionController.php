@@ -58,7 +58,7 @@ class StableProductionController extends Controller
     public function show($id)
     {
         // Get article
-        $stableProduction = StableProduction::findOrFail($id);
+        $stableProduction = StableProduction::where('idVillage', $id)->get();
 
         // Return single article as a resource
         return new StableProductionResource($stableProduction);

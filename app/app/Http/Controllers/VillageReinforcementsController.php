@@ -34,7 +34,7 @@ class VillageReinforcementsController extends Controller
         $villageReinforcements =  new VillageReinforcements;
 
         $villageReinforcements->reinforcementId = $request->input('reinforcementId');
-        $villageReinforcements->idvillage = $request->input('idvillage');
+        $villageReinforcements->idvillage = $request->input('idVillage');
         $villageReinforcements->idVillageFrom = $request->input('idVillageFrom');
         $villageReinforcements->tribe = $request->input('tribe');
         $villageReinforcements->troop1 = $request->input('troop1');
@@ -62,7 +62,7 @@ class VillageReinforcementsController extends Controller
     public function show($id)
     {
         // Get article
-        $villageReinforcements = VillageReinforcements::findOrFail($id);
+        $villageReinforcements = VillageReinforcements::where('idVillage', $id)->get();
 
         // Return single article as a resource
         return new VillageReinforcementsResource($villageReinforcements);

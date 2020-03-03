@@ -6,6 +6,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Dashboard</div>
+                    <router-link :to="{ name: 'resources' }">Resources</router-link>
                 <example-component></example-component>
                 <div class="card-body">
                     @if (session('status'))
