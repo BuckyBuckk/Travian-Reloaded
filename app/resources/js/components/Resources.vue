@@ -22,11 +22,9 @@
       </ul>
     </div>
   </div>
-
-  <div class="container" style="min-height:30px"></div>
-
-    <!-- Main Body -->
-  <div class="container">
+  
+  <!-- Main Body -->
+  <div class="container mt-4">
     <div class="row">
         <!-- Resource Fields -->
         <div class="col-md-8 col-sm-12 col-12">
@@ -69,65 +67,31 @@
 
         <!-- Troop Movements and other stuff on the right -->
         <div class="col-md-3 text-center mb-3">
-            <!--
-            <?php
-            if(count($incomingAttacks) || count($outgoingAttacks) || count($incomingReinforcements) || count($outgoingReinforcements)){
-                echo('<p class="h3">Troop Movements:</p>');
-
-                if(count($incomingAttacks) == 1){
-                    echo('
-                    <div class="d-flex justify-content-between">
-                        <h5 style="color:Red"><img style="width: 1.2rem;" src="/img/att_inc.gif"><strong> '.count($incomingAttacks).' Attack</strong></h5>
-                        <h5>in <span id="incAtt">'.date("H:i:s",(int)$incomingAttacks[0][5]-time()-3600).'</span></h5>
-                    </div>
-                    ');
-                }
-                else if(count($incomingAttacks) > 1){
-                    echo('
-                    <div class="d-flex justify-content-between">
-                        <h5 style="color:Red"><img style="width: 1.2rem;" src="/img/att_inc.gif"><strong> '.count($incomingAttacks).' Attacks</strong></h5>
-                        <h5>in <span id="incAtt">'.date("H:i:s",(int)$incomingAttacks[0][5]-time()-3600).'</span></h5>
-                    </div>
-                    ');
-                }
-
-                if(count($outgoingAttacks) == 1){
-                    echo('
-                    <div class="d-flex justify-content-between">
-                        <h5 style="color:Orange"><img style="width: 1.2rem;" src="/img/att_out.gif"><strong> '.count($outgoingAttacks).' Attack</strong></h5>
-                        <h5>in <span id="outAtt">'.date("H:i:s",(int)$outgoingAttacks[0][5]-time()-3600).'</span></h5>
-                    </div>
-                    ');
-                    }
-                else if(count($outgoingAttacks) > 1){
-                    echo('
-                    <div class="d-flex justify-content-between">
-                    <h5 style="color:Orange"><img style="width: 1.2rem;" src="/img/att_out.gif"><strong> '.count($outgoingAttacks).' Attacks</strong></h5>
-                        <h5>in <span id="outAtt">'.date("H:i:s",(int)$outgoingAttacks[0][5]-time()-3600).'</span></h5>
-                    </div>'
-                    );
-                }
-                
-                if(count($incomingReinforcements)){
-                    echo('
-                    <div class="d-flex justify-content-between">
-                    <h5 style="color:Orange"><img style="width: 1.2rem;" src="/img/att_out.gif"><strong> '.count($incomingReinforcements).' Reinf.</strong></h5>
-                        <h5>in <span id="outReinf">'.date("H:i:s",(int)$incomingReinforcements[0][5]-time()-3600).'</span></h5>
-                    </div>'
-                    );
-                }
-
-                if(count($outgoingReinforcements)){
-                    echo('
-                    <div class="d-flex justify-content-between">
-                    <h5 style="color:Orange"><img style="width: 1.2rem;" src="/img/def2.gif"><strong> '.count($outgoingReinforcements).' Reinf.</strong></h5>
-                        <h5>in <span id="incReinf">'.date("H:i:s",(int)$outgoingReinforcements[0][5]-time()-3600).'</span></h5>
-                    </div>'
-                    );
-                }
-            }
-            ?>
-            -->
+          <div class="h3">Troop Movements:</div>
+            <div  v-if="villageIncomingAttacks.length > 0 || villageOutgoingAttacks.length > 0 || 
+                        villageIncomingReinforcements.length > 0 || villageOutgoingReinforcements.length > 0">
+              <div class="d-flex justify-content-between">
+                <h5 style="color:Red"><img style="width: 1.2rem;" src="/img/att_inc.gif"><strong> {{villageIncomingAttacks.length}} Attacks</strong></h5>
+                <h5>in <span id="incAtt">{{villageIncomingAttacks[0].timeArrived}}</span></h5>
+              </div>
+              <div class="d-flex justify-content-between">
+                <h5 style="color:Orange"><img style="width: 1.2rem;" src="/img/att_out.gif"><strong> {{villageOutgoingAttacks.length}} Attacks</strong></h5>
+                <h5>in <span id="outAtt">{{villageOutgoingAttacks[0].timeArrived}}</span></h5>
+              </div>
+              <div class="d-flex justify-content-between">
+                <h5 style="color:Orange"><img style="width: 1.2rem;" src="/img/reinf_inc.gif"><strong> {{villageIncomingReinforcements.length}} Reinf.</strong></h5>
+                <h5>in <span id="incAtt">{{villageIncomingReinforcements[0].timeArrived}}</span></h5>
+              </div>
+              <div class="d-flex justify-content-between">
+                <h5 style="color:Green"><img style="width: 1.2rem;" src="/img/reinf_out.gif"><strong> {{villageOutgoingReinforcements.length}} Reinf.</strong></h5>
+                <h5>in <span id="incAtt">{{villageOutgoingReinforcements[0].timeArrived}}</span></h5>
+              </div>
+            </div>
+            <div class="h5" v-else>
+              <div class="text-center">
+                <h5>None</h5>
+              </div>
+            </div>
             <div class="h3 mt-3">Production:</div>
             <div class="d-flex justify-content-between">
                 <h5><img style="width: 1.5rem;height: 1rem;" src="storage/images/wood.gif"> Wood:</h5>
@@ -167,15 +131,6 @@
 export default {
   data() {
     return {
-      articles: [],
-      article: {
-        id: '',
-        title: '',
-        body: ''
-      },
-      article_id: '',
-      pagination: {},
-      edit: false,
       villageResources : [],
       maxResources : [],
       resFieldLevels : [],
@@ -185,7 +140,10 @@ export default {
       villageResFieldUpgrades : [],
       villageOwnTroops : [],
       villageReinforcements : [],
-      villageTroopMovements : [],
+      villageIncomingAttacks : [],
+      villageIncomingReinforcements : [],
+      villageOutgoingAttacks : [],
+      villageOutgoingReinforcements : [],
     };
   },
 
@@ -289,95 +247,29 @@ export default {
         fetch('/api/sendTroops/1')
         .then(res => res.json())
         .then(res => {
-          this.villageTroopMovements = res;
+
+          for(let troopMovement of res){
+            if(troopMovement.idVillageFrom == 1){
+              if(troopMovement.sendType == "full" || troopMovement.sendType == "raid"){
+                  this.villageOutgoingAttacks.push(troopMovement);
+              }
+              else if(troopMovement.sendType == "reinforcement"){
+                  this.villageOutgoingReinforcements.push(troopMovement);
+              }
+            }
+            else if(troopMovement.idVillageTo == 1){
+              if(troopMovement.sendType == "full" || troopMovement.sendType == "raid"){
+                  this.villageIncomingAttacks.push(troopMovement);
+              }
+              else if(troopMovement.sendType == "reinforcement"){
+                  this.villageIncomingReinforcements.push(troopMovement);
+              }
+            }
+          }
+
         })
         .catch(err => console.log(err));
-    },
-
-
-    fetchArticles(page_url) {
-      let vm = this;
-      page_url = page_url || '/api/articles';
-      fetch(page_url)
-        .then(res => res.json())
-        .then(res => {
-          this.articles = res.data;
-          vm.makePagination(res.meta, res.links);
-        })
-        .catch(err => console.log(err));
-    },
-    makePagination(meta, links) {
-      let pagination = {
-        current_page: meta.current_page,
-        last_page: meta.last_page,
-        next_page_url: links.next,
-        prev_page_url: links.prev
-      };
-
-      this.pagination = pagination;
-    },
-    deleteArticle(id) {
-      if (confirm('Are You Sure?')) {
-        fetch(`api/article/${id}`, {
-          method: 'delete'
-        })
-          .then(res => res.json())
-          .then(data => {
-            alert('Article Removed');
-            this.fetchArticles();
-          })
-          .catch(err => console.log(err));
-      }
-    },
-    addArticle() {
-      if (this.edit === false) {
-        // Add
-        fetch('api/article', {
-          method: 'post',
-          body: JSON.stringify(this.article),
-          headers: {
-            'content-type': 'application/json'
-          }
-        })
-          .then(res => res.json())
-          .then(data => {
-            this.clearForm();
-            alert('Article Added');
-            this.fetchArticles();
-          })
-          .catch(err => console.log(err));
-      } else {
-        // Update
-        fetch('api/article', {
-          method: 'put',
-          body: JSON.stringify(this.article),
-          headers: {
-            'content-type': 'application/json'
-          }
-        })
-          .then(res => res.json())
-          .then(data => {
-            this.clearForm();
-            alert('Article Updated');
-            this.fetchArticles();
-          })
-          .catch(err => console.log(err));
-      }
-    },
-    editArticle(article) {
-      this.edit = true;
-      this.article.id = article.id;
-      this.article.article_id = article.id;
-      this.article.title = article.title;
-      this.article.body = article.body;
-    },
-    clearForm() {
-      this.edit = false;
-      this.article.id = null;
-      this.article.article_id = null;
-      this.article.title = '';
-      this.article.body = '';
     }
   }
-};
+}
 </script>

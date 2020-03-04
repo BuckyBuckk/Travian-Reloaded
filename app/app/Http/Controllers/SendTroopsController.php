@@ -65,7 +65,7 @@ class SendTroopsController extends Controller
     public function show($id)
     {
         // Get article
-        $sendTroops = SendTroops::where('idVillageFrom', $id)->orWhere('idVillageTo', $id)->get();
+        $sendTroops = SendTroops::where('idVillageFrom', $id)->orWhere('idVillageTo', $id)->orderBy('timeArrived', 'asc')->get();
 
         // Return single article as a resource
         return new SendTroopsResource($sendTroops);
