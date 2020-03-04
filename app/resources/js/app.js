@@ -8,6 +8,8 @@ import VueRouter from 'vue-router';
 import Resources from './components/Resources.vue';
 import ExampleComponent from './components/ExampleComponent.vue';
 import Login from './components/Login.vue';
+import ResourceField from './components/ResourceField.vue';
+import App from './components/app.vue';
 
 
 require('./bootstrap');
@@ -28,6 +30,7 @@ Vue.component('navbar', require('./components/Navbar.vue').default);
 Vue.component('articles', require('./components/Articles.vue').default);
 Vue.component('login', require('./components/Login.vue').default);
 Vue.component('resources', require('./components/Resources.vue').default);
+Vue.component('resourceField', require('./components/ResourceField.vue').default);
 Vue.component('app', require('./components/app.vue').default);
 
 Vue.use(VueRouter);
@@ -38,6 +41,7 @@ const router = new VueRouter({
         {path: '/home', name: 'home', component: ExampleComponent},
         {path: '/login', name: 'login', component: Login},
         {path: '/resources', name: 'resources', component: Resources},
+        {path: '/resourceField/:rfid', name: 'resourceField', component: ResourceField},
     ],
 });
 
@@ -49,6 +53,6 @@ const router = new VueRouter({
 
 const app = new Vue({
     el: '#app',
-    //components: { App },
+    components: { App },
     router,
 });
