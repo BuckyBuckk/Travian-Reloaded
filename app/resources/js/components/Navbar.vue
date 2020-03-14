@@ -10,7 +10,7 @@
                     <router-link class="nav-link" :to="{ name: 'resources' }">Resources</router-link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/village">Village</a>
+                    <router-link class="nav-link" :to="{ name: 'village' }">Village</router-link>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/map">Map</a>

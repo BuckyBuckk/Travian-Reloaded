@@ -2,14 +2,13 @@
     <div class="container">
         <div class="justify-content-center text-center">
             <h1 class="my-4" v-if="resFieldTypeLong">{{ resFieldTypeLong + " Level " + resFieldLevel }}</h1>
-            <h6 class="my-4">Wood is produced here. By increasing its level you increase the production of wood.</h6>
+            <h6 class="my-4" v-if="resourceInfoLookup && resFieldTypeLong">{{resourceInfoLookup[resFieldTypeLong].description}}</h6>
             <h5>
-                <div>Current production:        10 per hour</div>
+                <div v-if="resourceInfoLookup && resFieldTypeLong">Current production:        {{resourceInfoLookup[resFieldTypeLong].production[resFieldLevel]}} per hour</div>
             </h5>
-            <h5>
-                <div>Production at Level {{ resFieldLevel+1 }}:        20 per hour</div>
+            <h5 class="mb-3">
+                <div v-if="resourceInfoLookup && resFieldTypeLong">Production at Level {{ resFieldLevel+1 }}:        {{resourceInfoLookup[resFieldTypeLong].production[resFieldLevel+1]}} per hour</div>
             </h5>
-            <br />
             <h4> 
                 <div class="mb-2">Cost for upgrading to Level {{ resFieldLevel+1 }}:</div>
             </h4>
@@ -32,42 +31,51 @@
 
 
 <script>
+
 export default {
   data() {
     return {
-      villageResources : [0,0,0,0],
+      resourceInfoLookup: undefined,
+      villageResources : [],
       maxResources : [0,0,0,0],
-      resFieldLevel : "",
-      resFieldType : "",
-      resFieldTypeLong : "",
+      resFieldLevel : 0,
+      resFieldType : undefined,
+      resFieldTypeLong : undefined,
     };
   },
 
   created() {
-    this.fetchvillageResources();
-    this.fetchMaxResources();
-    this.fetchResFieldTypes();
-    this.fetchResFieldLevels();
+    this.fetchVillageResources();
+    this.fetchVillageMaxResources();
+    this.fetchVillageResFieldTypes();
+    this.fetchVillageResFieldLevels();
+    this.fetchResourceInfoLookup();
   },
 
   methods: {
-    fetchvillageResources(){
-        fetch('/api/villageResources/1')
+    fetchResourceInfoLookup(){
+        fetch('/storage/infoTables/resourceInfoLookup.json')
         .then(res => res.json())
-        .then(res => {
-            this.villageResources = [res.currentWood,res.currentClay,res.currentIron,res.currentCrop];
-        })
+        .then(res => this.resourceInfoLookup = res)        
         .catch(err => console.log(err));
     },
-    fetchMaxResources(){
-        fetch('/api/villageMaxResources/1')
-        .then(res => res.json())
-        .then(res => {
-            this.maxResources = [res.maxWood,res.maxClay,res.maxIron,res.maxCrop];
-        })
-        .catch(err => console.log(err));
+    fetchVillageResources(){
+      this.villageResources = this.$store.getters.getVillageResources;
+
+      this.$store.dispatch('fetchVillageResources')
+      .then( () => {
+        this.villageResources = this.$store.getters.getVillageResources;
+      });
     },
-    fetchResFieldLevels(){
+    fetchVillageMaxResources(){
+      this.villageMaxResources = this.$store.getters.getVillageMaxResources;
+
+      this.$store.dispatch('fetchVillageMaxResources')
+      .then( () => {
+        this.villageMaxResources = this.$store.getters.getVillageMaxResources;
+      });
+    },
+    fetchVillageResFieldLevels(){
         fetch('/api/villageFieldLevels/1')
         .then(res => res.json())
         .then(res => {
@@ -80,14 +88,16 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    fetchResFieldTypes(){
+    fetchVillageResFieldTypes(){
         fetch('/api/villageFieldTypes/1')
         .then(res => res.json())
         .then(res => {
             let rfid = this.$route.params.rfid;
+            
             if (rfid > 4) rfid--;
             if (rfid > 11) rfid--;
             if (rfid > 18) rfid--;
+
             let key = "resField"+rfid+"Type";
             this.resFieldType = res[key];
 
