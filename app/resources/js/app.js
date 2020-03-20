@@ -69,6 +69,7 @@ const store = new Vuex.Store({
       villageIncomingReinforcements : [],
       villageOutgoingAttacks : [],
       villageOutgoingReinforcements : [],
+      villageBarracksProduction : [],
     },
     mutations: {
       increment (state, payload) {
@@ -112,7 +113,10 @@ const store = new Vuex.Store({
       },
       setVillageIncomingReinforcements(state, villageIncomingReinforcements){
         state.villageIncomingReinforcements = villageIncomingReinforcements;
-      }
+      },
+      setVillageBarracksProduction(state, villageBarracksProduction){
+        state.villageBarracksProduction = villageBarracksProduction;
+      },
     },
     actions: {
         increment (context,payload) {
@@ -243,11 +247,19 @@ const store = new Vuex.Store({
                 context.commit('setVillageOutgoingAttacks', villageOutgoingAttacks);
                 context.commit('setVillageOutgoingReinforcements', villageOutgoingReinforcements);
                 context.commit('setVillageIncomingAttacks', villageIncomingAttacks);
-                context.commit('setVillageIncomingReinforcements', villageIncomingReinforcements);
-    
+                context.commit('setVillageIncomingReinforcements', villageIncomingReinforcements);    
             })
             .catch(err => console.log(err));
-        }
+        },
+        async fetchVillageBarracksProduction(context){
+            await fetch('/api/barracksProductions/1')
+            .then(res => res.json())
+            .then(res => {
+              let villageBarracksProduction = res;
+              context.commit('setVillageBarracksProduction', villageBarracksProduction);
+            })
+            .catch(err => console.log(err));
+        },
         
     },
     getters: {
@@ -292,7 +304,10 @@ const store = new Vuex.Store({
         },
         getVillageIncomingReinforcements: state => {
             return state.villageIncomingReinforcements;
-        }
+        },
+        getVillageBarracksProduction: state => {
+            return state.villageBarracksProduction;
+        },
     }
   })
 

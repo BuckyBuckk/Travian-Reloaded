@@ -30,6 +30,9 @@ Route::put('article', 'ArticleController@store');
 Route::delete('article/{id}', 'ArticleController@destroy');
 */
 
+Route::get('calculateProduction/{id}', 'CalculateProductionController@calculate');
+Route::get('getCurrentResources/{id}', 'GetCurrentResourcesController@calculate');
+
 Route::get('villages', 'AllVillagesController@index');
 Route::get('villages/{id}', 'AllVillagesController@show');
 Route::post('villages', 'AllVillagesController@store');
@@ -78,9 +81,9 @@ Route::post('villageOwnTroops', 'VillageOwnTroopsController@store');
 Route::put('villageOwnTroops/{id}', 'VillageOwnTroopsController@update');
 Route::delete('villageOwnTroops/{id}', 'VillageOwnTroopsController@destroy');
 
-Route::get('villageProduction', 'VillageProductionController@index');
+Route::get('villageProductions', 'VillageProductionController@index');
 Route::get('villageProductions/{id}', 'VillageProductionController@show');
-Route::post('villageProduction', 'VillageProductionController@store');
+Route::post('villageProductions', 'VillageProductionController@store');
 Route::put('villageProductions/{id}', 'VillageProductionController@update');
 Route::delete('villageProductions/{id}', 'VillageProductionController@destroy');
 

@@ -139,6 +139,7 @@
       </div>
     </div>
   </div>
+  
 </template>
 
 <script>
@@ -172,9 +173,18 @@ export default {
     this.fetchVillageOwnTroops();
     this.fetchVillageReinforcements();
     this.fetchVillageResFieldUpgrades();
+    this.calculateProduction();
+    //this.startIntervals();
   },
 
   methods: {
+    calculateProduction(){
+      fetch('/api/calculateProduction/1')
+      .then( () => {
+        this.fetchVillageProduction();
+      })
+        .catch(err => console.log(err));
+    },
     fetchVillageResources(){
       this.villageResources = this.$store.getters.getVillageResources;
 
@@ -215,6 +225,9 @@ export default {
       this.$store.dispatch('fetchVillageProduction')
       .then( () => {
         this.villageProduction = this.$store.getters.getVillageProduction;
+      })
+      .then( () => {
+        this.startIntervals();
       });
     },
     fetchVillageResFieldUpgrades(){
@@ -254,6 +267,51 @@ export default {
         this.villageIncomingAttacks = this.$store.getters.getVillageIncomingAttacks;
         this.villageIncomingReinforcements = this.$store.getters.getVillageIncomingReinforcements;
       });
+    },
+    startIntervals(){
+      let woodInterval = setInterval( ()=> {
+        let curWood = document.getElementById("currentWood").innerHTML;
+        let maxWood = document.getElementById("maxWood").innerHTML;
+        if(parseInt(curWood) < parseInt(maxWood)){
+            document.getElementById("currentWood").innerHTML=parseInt(curWood)+1;
+        }
+        else if(document.getElementById("currentWood").innerHTML && document.getElementById("maxWood").innerHTML){
+            clearInterval(woodInterval);
+        }
+      }, 1000*3600 / this.villageProduction[0]);
+
+      let clayInterval = setInterval( ()=> {
+        let curClay = document.getElementById("currentClay").innerHTML;
+        let maxClay = document.getElementById("maxClay").innerHTML;
+        if(parseInt(curClay) < parseInt(maxClay)){
+            document.getElementById("currentClay").innerHTML=parseInt(curClay)+1;
+        }
+        else if(document.getElementById("currentClay").innerHTML && document.getElementById("maxClay").innerHTML){
+            clearInterval(clayInterval);
+        }
+      }, 1000*3600 / this.villageProduction[1]);
+
+      let ironInterval = setInterval( ()=> {
+        let curIron = document.getElementById("currentIron").innerHTML;
+        let maxIron = document.getElementById("maxIron").innerHTML;
+        if(parseInt(curIron) < parseInt(maxIron)){
+            document.getElementById("currentIron").innerHTML=parseInt(curIron)+1;
+        }
+        else if(document.getElementById("currentIron").innerHTML && document.getElementById("maxIron").innerHTML){
+            clearInterval(ironInterval);
+        }
+      }, 1000*3600 / this.villageProduction[2]);
+        
+      let cropInterval = setInterval( ()=> {
+        let curCrop = document.getElementById("currentCrop").innerHTML;
+        let maxCrop = document.getElementById("maxCrop").innerHTML;
+        if(parseInt(curCrop) < parseInt(maxCrop)){
+            document.getElementById("currentCrop").innerHTML=parseInt(curCrop)+1;
+        }
+        else if(document.getElementById("currentCrop").innerHTML && document.getElementById("maxCrop").innerHTML){
+            clearInterval(cropInterval);
+        }
+      }, 1000*3600 / this.villageProduction[3]);
     }
   }
 }
