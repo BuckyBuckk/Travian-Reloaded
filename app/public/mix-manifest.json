@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/css/hexcss.css": "/css/hexcss.css"
+    "/css/hexcss.css": "/css/hexcss.css",
+    "/js/date.format.js": "/js/date.format.js"
 }

@@ -53,6 +53,13 @@ class CalculateProductionController extends Controller
             }
         }
 
+        // Speed
+        $productionWood *= 10;
+        $productionClay *= 10;
+        $productionIron *= 10;
+        $productionCrop *= 10;
+
+
         $villageResFieldProductionPostRequest = $client->request('PUT', 'villageProductions/'.$id, [
             'form_params' => [
                 'idVillage' => $id,

@@ -32,6 +32,7 @@ Route::delete('article/{id}', 'ArticleController@destroy');
 
 Route::get('calculateProduction/{id}', 'CalculateProductionController@calculate');
 Route::get('getCurrentResources/{id}', 'GetCurrentResourcesController@calculate');
+Route::get('upgradeResField/{id}/{rfid}', 'UpgradeResFieldController@upgrade');
 
 Route::get('villages', 'AllVillagesController@index');
 Route::get('villages/{id}', 'AllVillagesController@show');

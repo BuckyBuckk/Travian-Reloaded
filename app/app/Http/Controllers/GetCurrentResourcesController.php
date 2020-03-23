@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 require "/var/www/vendor/autoload.php";
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise;
 
 use Illuminate\Http\Request;
 
@@ -15,63 +16,52 @@ class GetCurrentResourcesController extends Controller
             // Base URI is used with relative requests
             'base_uri' => '172.20.0.5/api/',
             // You can set any number of default request options.
-            'timeout'  => 2.0,
+            'timeout'  => 5.0,
         ]);
 
-        $villagePreviousResourcesResponse = $client->request('GET', 'villageResources/'.$id)->getBody();
+        $promises = [
+            'villagePreviousResourcesPromise' => $client->getAsync('villageResources/'.$id),
+            'villageProductionPromise' => $client->getAsync('villageProductions/'.$id),
+            'villageMaxResourcesPromise' => $client->getAsync('villageMaxResources/'.$id)
+        ];
+
+        $responses = Promise\unwrap($promises);
+        $responses = Promise\settle($promises)->wait();
+        
+        $villagePreviousResourcesResponse = $responses['villagePreviousResourcesPromise']['value']->getBody();
+        $villageProductionResponse = $responses['villageProductionPromise']['value']->getBody();
+        $villageMaxResourcesResponse = $responses['villageMaxResourcesPromise']['value']->getBody();
+
         $villagePreviousResources = (array) json_decode($villagePreviousResourcesResponse);
-
-        $villageMaxResourcesResponse = $client->request('GET', 'villageMaxResources/'.$id)->getBody();
         $villageMaxResources = (array) json_decode($villageMaxResourcesResponse);
-
-        $villageProductionResponse = $client->request('GET', 'villageProductions/'.$id)->getBody();
         $villageProduction = (array) json_decode($villageProductionResponse);
-
-        var_dump($villagePreviousResources);
-        echo "<br/>";
-        var_dump($villageMaxResources);
-        echo "<br/>";
-        var_dump($villageProduction);
-        echo "<br/>";
 
         $currentTime = time();
 
         $timeDiff = ($currentTime - $villagePreviousResources["lastUpdate"]) / 3600;
-
-        var_dump($currentTime);
-        echo "<br/>";
-        var_dump($villagePreviousResources["lastUpdate"]);
-        echo "<br/>";
-        var_dump($timeDiff);
 
         $newWood = $villagePreviousResources["currentWood"] + $timeDiff*$villageProduction["productionWood"];
         $newClay = $villagePreviousResources["currentClay"] + $timeDiff*$villageProduction["productionClay"];
         $newIron = $villagePreviousResources["currentIron"] + $timeDiff*$villageProduction["productionIron"];
         $newCrop = $villagePreviousResources["currentCrop"] + $timeDiff*$villageProduction["productionCrop"];
 
-        var_dump($newWood);
-        echo "<br/>";
-        var_dump($newClay);
-        echo "<br/>";
-        var_dump($newIron);
-        echo "<br/>";
-        var_dump($newCrop);
-        echo "<br/>";
-
         if($newWood >= $villageMaxResources["maxWood"]){ $newWood = $villageMaxResources["maxWood"]; }
         if($newClay >= $villageMaxResources["maxClay"]){ $newClay = $villageMaxResources["maxClay"]; }
         if($newIron >= $villageMaxResources["maxIron"]){ $newIron = $villageMaxResources["maxIron"]; }
         if($newCrop >= $villageMaxResources["maxCrop"]){ $newCrop = $villageMaxResources["maxCrop"]; }
 
-        var_dump($newWood);
-        echo "<br/>";
-        var_dump($newClay);
-        echo "<br/>";
-        var_dump($newIron);
-        echo "<br/>";
-        var_dump($newCrop);
-        echo "<br/>";
+        $villageResourcesPostRequest = $client->request('PUT', 'villageResources/'.$id, [
+            'form_params' => [
+                'idVillage' => $id,
+                'currentWood' => $newWood,
+                'currentClay' => $newClay,
+                'currentIron' => $newIron,
+                'currentCrop' => $newCrop,
+                'lastUpdate' => $currentTime
+            ]
+        ]);
 
+        return $villageResourcesPostRequest->getBody();
         
     }
 }

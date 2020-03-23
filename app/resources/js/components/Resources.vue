@@ -5,19 +5,19 @@
         <ul class="list-group list-group-horizontal flex-row">
           <li class="list-group-item">
               <img style="width: 1.2rem;height: 0.9rem;" src="/storage/images/wood.gif">
-              <span id="currentWood">{{ villageResources[0] }}</span>/<span id="maxWood">{{ villageMaxResources[0] }}</span>
+              <span id="currentWood">{{ parseInt(villageResources[0]) }}</span>/<span id="maxWood">{{ villageMaxResources[0] }}</span>
           </li>
           <li class="list-group-item">
               <img style="width: 1.2rem;height: 0.9rem;" src="/storage/images/clay.gif">
-              <span id="currentClay">{{ villageResources[1] }}</span>/<span id="maxClay">{{ villageMaxResources[1] }}</span>
+              <span id="currentClay">{{ parseInt(villageResources[1]) }}</span>/<span id="maxClay">{{ villageMaxResources[1] }}</span>
           </li>
           <li class="list-group-item">
               <img style="width: 1.2rem;height: 0.9rem;" src="/storage/images/iron.gif">
-              <span id="currentIron">{{ villageResources[2] }}</span>/<span id="maxIron">{{ villageMaxResources[2] }}</span>
+              <span id="currentIron">{{ parseInt(villageResources[2]) }}</span>/<span id="maxIron">{{ villageMaxResources[2] }}</span>
           </li>
           <li class="list-group-item">
               <img style="width: 1.2rem;height: 0.9rem;" src="/storage/images/crop.gif">
-              <span id="currentCrop">{{ villageResources[3] }}</span>/<span id="maxCrop">{{ villageMaxResources[3] }}</span>
+              <span id="currentCrop">{{ parseInt(villageResources[3]) }}</span>/<span id="maxCrop">{{ villageMaxResources[3] }}</span>
           </li>
       </ul>
     </div>
@@ -64,15 +64,15 @@
               <h5><img style="width: 1.0rem;height: 0.9rem;" src="/storage/images/del.gif"> 
                 {{ villageResFieldUpgrades[0].fieldType }} 
                 (Level {{ villageResFieldUpgrades[0].fieldLevel }})</h5>
-              <h5>in <span id="upgradeCD1">{{villageResFieldUpgrades[0].timeCompleted}}</span> hours</h5>
-              <h5>done at {{villageResFieldUpgrades[0].timeCompleted}} </h5>
+              <h5>in <span id="upgradeCD1">{{ new Date(villageResFieldUpgrades[0].timeCompleted*1000 - Math.floor(new Date().getTime())).format('h:i:s') }}</span> hours</h5>
+              <h5>done at {{ new Date(villageResFieldUpgrades[0].timeCompleted*1000).format('h:i:s')}} </h5>
           </div>
           <div class="d-flex justify-content-between  pl-5 ml-4" v-if="villageResFieldUpgrades.length == 2">
               <h5><img style="width: 1.0rem;height: 0.9rem;" src="/storage/images/del.gif"> 
                 {{ villageResFieldUpgrades[1].fieldType }} 
                 (Level {{ villageResFieldUpgrades[1].fieldLevel }})</h5>
-              <h5>in <span id="upgradeCD1">{{villageResFieldUpgrades[1].timeCompleted}}</span> hours</h5>
-              <h5>done at {{villageResFieldUpgrades[1].timeCompleted}} </h5>
+              <h5>in <span id="upgradeCD1">{{ new Date(villageResFieldUpgrades[1].timeCompleted*1000 - Math.floor(new Date().getTime())).format('h:i:s') }}</span> hours</h5>
+              <h5>done at {{ new Date(villageResFieldUpgrades[1].timeCompleted*1000).format('h:i:s') }} </h5>
           </div>
         </div>
 
@@ -174,14 +174,24 @@ export default {
     this.fetchVillageReinforcements();
     this.fetchVillageResFieldUpgrades();
     this.calculateProduction();
-    //this.startIntervals();
+    this.calculateResources();
   },
 
   methods: {
+    calculateResources(){
+      fetch('/api/getCurrentResources/1')
+      .then(res => res.json())
+      .then(res => {
+        //console.log(res);
+        //this.villageResources = [res.currentWood,res.currentClay,res.currentIron,res.currentCrop];
+        this.fetchVillageResources();
+      })
+        .catch(err => console.log(err));
+    },
     calculateProduction(){
       fetch('/api/calculateProduction/1')
       .then( () => {
-        this.fetchVillageProduction();
+        //this.fetchVillageProduction();
       })
         .catch(err => console.log(err));
     },
@@ -269,47 +279,39 @@ export default {
       });
     },
     startIntervals(){
-      let woodInterval = setInterval( ()=> {
-        let curWood = document.getElementById("currentWood").innerHTML;
-        let maxWood = document.getElementById("maxWood").innerHTML;
-        if(parseInt(curWood) < parseInt(maxWood)){
-            document.getElementById("currentWood").innerHTML=parseInt(curWood)+1;
+      var woodInterval = setInterval( ()=> {
+        if(parseInt(this.villageResources[0]) < this.villageMaxResources[0]){
+          this.$set(this.villageResources, 0, this.villageResources[0]+1);
         }
-        else if(document.getElementById("currentWood").innerHTML && document.getElementById("maxWood").innerHTML){
-            clearInterval(woodInterval);
+        else if(this.villageResources[0] == this.villageMaxResources[0]){
+          clearInterval(woodInterval);
         }
       }, 1000*3600 / this.villageProduction[0]);
 
-      let clayInterval = setInterval( ()=> {
-        let curClay = document.getElementById("currentClay").innerHTML;
-        let maxClay = document.getElementById("maxClay").innerHTML;
-        if(parseInt(curClay) < parseInt(maxClay)){
-            document.getElementById("currentClay").innerHTML=parseInt(curClay)+1;
+      var clayInterval = setInterval( ()=> {
+        if(parseInt(this.villageResources[1]) < this.villageMaxResources[1]){
+          this.$set(this.villageResources, 1, this.villageResources[1]+1);
         }
-        else if(document.getElementById("currentClay").innerHTML && document.getElementById("maxClay").innerHTML){
-            clearInterval(clayInterval);
+        else if(this.villageResources[1] == this.villageMaxResources[1]){
+          clearInterval(clayInterval);
         }
       }, 1000*3600 / this.villageProduction[1]);
 
-      let ironInterval = setInterval( ()=> {
-        let curIron = document.getElementById("currentIron").innerHTML;
-        let maxIron = document.getElementById("maxIron").innerHTML;
-        if(parseInt(curIron) < parseInt(maxIron)){
-            document.getElementById("currentIron").innerHTML=parseInt(curIron)+1;
+      var ironInterval = setInterval( ()=> {
+        if(parseInt(this.villageResources[2]) < this.villageMaxResources[2]){
+          this.$set(this.villageResources, 2, this.villageResources[2]+1);
         }
-        else if(document.getElementById("currentIron").innerHTML && document.getElementById("maxIron").innerHTML){
-            clearInterval(ironInterval);
+        else if(this.villageResources[2] == this.villageMaxResources[2]){
+          clearInterval(ironInterval);
         }
       }, 1000*3600 / this.villageProduction[2]);
         
-      let cropInterval = setInterval( ()=> {
-        let curCrop = document.getElementById("currentCrop").innerHTML;
-        let maxCrop = document.getElementById("maxCrop").innerHTML;
-        if(parseInt(curCrop) < parseInt(maxCrop)){
-            document.getElementById("currentCrop").innerHTML=parseInt(curCrop)+1;
+      var cropInterval = setInterval( ()=> {
+        if(parseInt(this.villageResources[3]) < this.villageMaxResources[3]){
+          this.$set(this.villageResources, 3, this.villageResources[3]+1);
         }
-        else if(document.getElementById("currentCrop").innerHTML && document.getElementById("maxCrop").innerHTML){
-            clearInterval(cropInterval);
+        else if(this.villageResources[3] == this.villageMaxResources[3]){
+          clearInterval(cropInterval);
         }
       }, 1000*3600 / this.villageProduction[3]);
     }

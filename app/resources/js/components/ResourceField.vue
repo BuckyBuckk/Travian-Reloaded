@@ -23,7 +23,7 @@
                 </div>
             </h5>
             <h5 class="mt-4"> 
-                <a>Upgrade to Level {{ resFieldLevel+1 }}</a> 
+                <button @click="upgradeResField()">Upgrade to Level {{ resFieldLevel+1 }}</button> 
             </h5>
         </div>
     </div>
@@ -53,6 +53,32 @@ export default {
   },
 
   methods: {
+    upgradeResField(){
+      let rfid = this.$route.params.rfid;
+      if (rfid > 4) rfid--;
+      if (rfid > 11) rfid--;
+      if (rfid > 18) rfid--;
+
+      fetch('/api/upgradeResField/1/' + rfid)
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        if(res == "true"){
+          this.$router.push({ name: 'resources' });
+        }
+      })
+        .catch(err => console.log(err));
+    },
+    calculateResources(){
+      fetch('/api/getCurrentResources/1')
+      .then(res => res.json())
+      .then(res => {
+        //console.log(res);
+        //this.villageResources = [res.currentWood,res.currentClay,res.currentIron,res.currentCrop];
+        this.fetchVillageResources();
+      })
+        .catch(err => console.log(err));
+    },
     fetchResourceInfoLookup(){
         fetch('/storage/infoTables/resourceInfoLookup.json')
         .then(res => res.json())
